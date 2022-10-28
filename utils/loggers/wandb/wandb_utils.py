@@ -133,8 +133,8 @@ class WandbLogger():
 
        """
         # Temporary-fix
-        if opt.upload_dataset:
-            opt.upload_dataset = False
+        # if opt.upload_dataset:
+        #     opt.upload_dataset = False
             # LOGGER.info("Uploading Dataset functionality is not being supported temporarily due to a bug.")
 
         # Pre-training routine --
@@ -215,6 +215,7 @@ class WandbLogger():
                                                 'YOLOv5' if opt.project == 'runs/train' else Path(opt.project).stem)
         with open(config_path, errors='ignore') as f:
             wandb_data_dict = yaml.safe_load(f)
+        print(wandb_data_dict)
         return wandb_data_dict
 
     def setup_training(self, opt):
@@ -350,8 +351,10 @@ class WandbLogger():
         log_val_only = isinstance(upload_dataset, str) and upload_dataset == 'val'
         self.data_dict = check_dataset(data_file)  # parse and check
         data = dict(self.data_dict)
+        print(data['names'])
         nc, names = (1, ['item']) if single_cls else (int(data['nc']), data['names'])
-        names = {k: v for k, v in enumerate(names)}  # to index dictionary
+        names = data['names'] # to index dictionary
+        print(names)
 
         # log train set
         if not log_val_only:
